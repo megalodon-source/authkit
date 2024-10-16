@@ -21,6 +21,29 @@ const UserSchema = new mongoose.Schema({
 
     photo: {
         type: String,
-        default: "./",
+        default: "https://avatars.githubusercontent.com/u/19819005?v=4",
     },
+
+    bio: {
+        type: String,
+        default: "I am a new user.",
+    },
+
+    role: {
+        type: String,
+        enum: ["user", "admin", "creator"],
+        default: "user",
+    },
+
+    isVerified: {
+        type: Boolean,
+        default: false,
+    },
+}, 
+{ 
+    timestamps: true, minimize: true 
 });
+
+const User = mongoose.model("User", UserSchema);
+
+export default User;
