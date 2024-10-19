@@ -1,5 +1,5 @@
 import asyncHandler from "express-async-handler";
-import jwt from "jsonwebtoken";
+import jwt, { decode } from "jsonwebtoken";
 import User from "../models/auth/UserModel.js";
 
 export const protect = asyncHandler(async (req, res, next) => {
@@ -70,3 +70,19 @@ export const verifiedMiddleware = asyncHandler(async (req, res, next) =>{
     res.status(403).json({ message: "Please verify your email address!" });
 });
 
+// login status
+export const userLoginStatus = asyncHandler(async (req, res) => {
+    const token = req.cookies.token;
+
+    if (!token) {
+        // 401 Unauthorized
+        res.status(401).json({ message: "Not authorized, please login!" });
+    }
+    // verify the token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (decoded) {
+        res.status(200).json(true);
+    } else {
+        res.status(401).json(false);
+    }
+});
