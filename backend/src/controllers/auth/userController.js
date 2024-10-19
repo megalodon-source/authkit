@@ -72,7 +72,7 @@ export const loginUser = asyncHandler(async (req, res) => {
     // get email and password from req.body
     const { email, password } = req.body;
 
-    // vqlidation
+    // validation
     if (!email || !password) {
         // 400 Bad Request
         return res.status(400).json({ message: "All fileds are required" });
@@ -86,9 +86,10 @@ export const loginUser = asyncHandler(async (req, res) => {
     }
 
     // check id the password match the hashed password in the database
-    const isMatch = await bcrypt.compare(passwowrd, userExists.password);
+    const isMatch = await bcrypt.compare(password, userExists.password);
 
     if (!isMatch) {
+        // 400 Bad Request
         return res.status(400).json({ message: "Invalid credentials" });
     }
 
@@ -121,4 +122,11 @@ export const loginUser = asyncHandler(async (req, res) => {
     } else {
         res.status(400).json({ message: "Invalid email or password" });
     }
+});
+
+// Logout user
+export const logoutUser = asyncHandler(async (req, res) => {
+    res.clearCookie("token");
+
+    res.status(200).json({ message: "User logged out" });
 });
